@@ -1,0 +1,29 @@
+.home-icon {
+  font-size: 40px;
+}
+
+.header {
+  align-items: center;
+
+  &-left-content {
+    align-items: center;
+  }
+
+  &-title {
+    margin-bottom: 0;
+  }
+
+  &-input {
+    width: 300px;
+    max-width: 300px;
+    margin-right: 10px;
+  }
+}
+
+.welcome-text {
+  margin: 0 10px 0 auto;
+}
+
+.button-divider {
+  height: 100%;
+}

@@ -16,15 +16,19 @@ exports.getListMovies = (req, res) => {
       .sort({ createdAt: "desc" })
       .limit(Number(limit))
       .skip(Number(offset))
-      .populate("User")
+      .populate([
+        { path: "user", select: "email _id" },
+        { path: "upVotes", select: "email _id" },
+        { path: "downVotes", select: "email _id" },
+      ])
       .exec(),
     Movie.countDocuments(query).exec(),
   ])
     .then((results) => {
-      const [movies, totalMovies] = results;
+      const [data, totalMovies] = results;
 
       res.status(200).send({
-        data: movies,
+        data,
         totalMovies,
       });
     })
