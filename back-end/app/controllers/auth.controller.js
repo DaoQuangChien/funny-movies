@@ -33,6 +33,9 @@ exports.signin = (req, res) => {
       email: req.body.email,
     },
     (err, user) => {
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
       const passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
@@ -44,9 +47,6 @@ exports.signin = (req, res) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
-      }
-      if (!user) {
-        return res.status(404).send({ message: "User Not found." });
       }
       if (!passwordIsValid) {
         return res.status(401).send({

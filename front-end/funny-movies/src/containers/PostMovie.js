@@ -4,7 +4,7 @@ import request from "../services/request";
 import axios from "axios";
 import { withRouter } from "react-router";
 
-const PostVideo = ({ history }) => {
+const PostMovie = ({ history }) => {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const onUrlChange = (e) => setYoutubeUrl(e.currentTarget.value);
   const onPostMovie = () => {
@@ -14,7 +14,7 @@ const PostVideo = ({ history }) => {
       .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
 
     if (url[2] !== undefined) {
-      videoId = url[2].split(/[^0-9a-z_\-]/i);
+      videoId = url[2].split(/[^0-9a-z_-]/i);
       videoId = videoId[0];
     } else {
       videoId = url;
@@ -69,4 +69,4 @@ const PostVideo = ({ history }) => {
   );
 };
 
-export default withRouter(PostVideo);
+export default withRouter(PostMovie);

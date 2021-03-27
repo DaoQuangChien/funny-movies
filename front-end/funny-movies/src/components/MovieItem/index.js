@@ -4,13 +4,18 @@ import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import "./styles.scss";
 
 const MovieItem = ({
+  _id,
   title,
   movieUrlId,
   user: { email },
   description,
   upVoteAmount,
   downVoteAmount,
+  upVoted,
+  downVoted,
   isVoted,
+  onUpVoteMovie,
+  onDownVoteMovie,
 }) => {
   return (
     <Card className="movie-item" hoverable>
@@ -37,7 +42,10 @@ const MovieItem = ({
                   type="ghost"
                   icon={<LikeOutlined />}
                   disabled={isVoted}
-                  className="action-button"
+                  className={
+                    upVoted ? "action-button up-voted" : "action-button"
+                  }
+                  onClick={onUpVoteMovie(_id)}
                 />
                 {upVoteAmount}
               </div>
@@ -47,7 +55,10 @@ const MovieItem = ({
                   icon={<DislikeOutlined />}
                   disabled={isVoted}
                   danger
-                  className="action-button"
+                  className={
+                    downVoted ? "action-button down-voted" : "action-button"
+                  }
+                  onClick={onDownVoteMovie(_id)}
                 />
                 {downVoteAmount}
               </div>

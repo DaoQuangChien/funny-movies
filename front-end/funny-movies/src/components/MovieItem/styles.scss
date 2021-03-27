@@ -24,5 +24,15 @@
 
   .action-button {
     margin-right: 10px;
+
+    &.up-voted {
+      border-color: #40a9ff;
+      color: #40a9ff;
+    }
+
+    &.down-voted {
+      color: #ff4d4f;
+      border-color: #ff4d4f;
+    }
   }
 }

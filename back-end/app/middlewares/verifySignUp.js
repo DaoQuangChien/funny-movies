@@ -20,6 +20,25 @@ checkDuplicateEmail = (req, res, next) => {
   );
 };
 
+checkEmptyFields = (req, res, next) => {
+  let errMesseages = [];
+  const isEmailEmpty = !req.body.email || !req.body.email.length;
+  const isPasswordEmpty = !req.body.password || !req.body.password.length;
+
+  if (isEmailEmpty) {
+    errMesseages = [...errMesseages, "Failed! Email is required!"];
+  }
+  if (isPasswordEmpty) {
+    errMesseages = [...errMesseages, "Failed! Password is required!"];
+  }
+  if (errMesseages.length) {
+    res.status(400).send({ message: errMesseages.join("\n") });
+    return;
+  }
+  next();
+};
+
 module.exports = {
   checkDuplicateEmail,
+  checkEmptyFields,
 };

@@ -1,22 +1,14 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Spin } from "antd";
 import { MovieItem } from "../components";
 import request from "../services/request";
-import { getUserData, useAuthenActions } from "../shared";
+import { useAuthenActions } from "../shared";
 
 const Home = () => {
-  const userData = useMemo(getUserData, []);
-  const [isSignIn] = useAuthenActions();
+  const { isSignIn, userData } = useAuthenActions();
   const [moviesList, setMoviesList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchDataTurn, setFetchDataTurn] = useState(0);
-  const fetchDataTurnRef = useRef();
   const getMoviesList = useCallback(() => {
     setLoading(true);
     request
@@ -26,16 +18,20 @@ const Home = () => {
           res.data.map((movie) => {
             const { upVotes, downVotes } = movie;
             let isVoted;
+            let upVoted = false;
+            let downVoted = false;
 
             if (userData) {
-              isVoted =
-                upVotes.some((user) => user._id === userData.id) ||
-                downVotes.some((user) => user._id === userData.id);
+              upVoted = !!upVotes.find((user) => user._id === userData.id);
+              downVoted = !!downVotes.find((user) => user._id === userData.id);
+              isVoted = upVoted || downVoted;
             }
             return {
               ...movie,
               upVoteAmount: upVotes.length,
               downVoteAmount: downVotes.length,
+              upVoted,
+              downVoted,
               isVoted,
             };
           })
@@ -43,15 +39,28 @@ const Home = () => {
       })
       .finally(() => setLoading(false));
   }, [userData]);
-  console.log(isSignIn);
+  const onMovieActions = (url, movieId) =>
+    request
+      .post(url, { movieId })
+      .then(() => setFetchDataTurn((val) => val + 1));
+  const onUpVoteMovie = (movieId) => () =>
+    onMovieActions("movie/upvote", movieId);
+  const onDownVoteMovie = (movieId) => () =>
+    onMovieActions("movie/downvote", movieId);
+
   useEffect(() => {
     getMoviesList();
-  }, [getMoviesList, isSignIn]);
+  }, [getMoviesList, isSignIn, fetchDataTurn]);
   return (
     <div className="home-container">
       <Spin spinning={loading}>
         {moviesList.map((movie) => (
-          <MovieItem {...movie} key={movie._id} />
+          <MovieItem
+            {...movie}
+            onUpVoteMovie={onUpVoteMovie}
+            onDownVoteMovie={onDownVoteMovie}
+            key={movie._id}
+          />
         ))}
       </Spin>
     </div>

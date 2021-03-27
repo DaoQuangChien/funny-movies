@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,18 +7,17 @@ import {
 } from "react-router-dom";
 import "./App.scss";
 import { HeaderBar } from "./components";
-import { Home, PostVideo } from "./containers";
-import request from "./services/request";
-import { getUserData, useAuthenActions } from "./shared";
+import { Home, PostMovie } from "./containers";
+import { AuthContext, getUserData, useAuthenActions } from "./shared";
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const userData = getUserData();
+  const { isSignIn } = useAuthenActions();
 
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        userData ? (
+        isSignIn ? (
           children
         ) : (
           <Redirect
@@ -34,39 +33,30 @@ const PrivateRoute = ({ children, ...rest }) => {
 };
 
 const App = () => {
-  const [, setIsSignIn] = useAuthenActions();
-  const onAuthenticate = (path) => (email, password) => {
-    return request
-      .post(path, {
-        email,
-        password,
-      })
-      .then((res) => {
-        localStorage.setItem("user", JSON.stringify(res));
-        setIsSignIn(true);
-      });
-  };
-  const onSignIn = onAuthenticate("/auth/signin");
-  const onSignUp = onAuthenticate("/auth/signup");
-  const onSignOut = () => {
-    setIsSignIn(false);
-    localStorage.removeItem("user");
-  };
+  const [, dispatch] = useContext(AuthContext);
 
+  useEffect(() => {
+    const userData = getUserData();
+
+    if (userData) {
+      dispatch({
+        type: "signin",
+        payload: {
+          userData,
+        },
+      });
+    }
+  }, [dispatch]);
   return (
     <Router>
       <div className="app-container">
-        <HeaderBar
-          onSignIn={onSignIn}
-          onSignUp={onSignUp}
-          onSignOut={onSignOut}
-        />
+        <HeaderBar />
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
           <PrivateRoute path="/post-video">
-            <PostVideo />
+            <PostMovie />
           </PrivateRoute>
         </Switch>
       </div>
