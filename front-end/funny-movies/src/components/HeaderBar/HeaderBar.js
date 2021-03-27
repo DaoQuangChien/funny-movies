@@ -35,7 +35,7 @@ const HeaderBar = ({ history }) => {
     });
   };
   const onSignOut = () => signOut();
-  const onNavigateToPostVideo = () => history.push("/post-video");
+  const onNavigateToPostVideo = () => history.push("/post-movie");
   const SignInLayout = (
     <>
       <p className="welcome-text">

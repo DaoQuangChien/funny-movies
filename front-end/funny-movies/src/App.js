@@ -55,7 +55,7 @@ const App = () => {
           <Route exact path="/">
             <Home />
           </Route>
-          <PrivateRoute path="/post-video">
+          <PrivateRoute path="/post-movie">
             <PostMovie />
           </PrivateRoute>
         </Switch>
