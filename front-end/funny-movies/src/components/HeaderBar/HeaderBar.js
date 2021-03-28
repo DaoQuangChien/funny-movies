@@ -81,7 +81,7 @@ const HeaderBar = ({ history }) => {
   return (
     <Row className="header">
       <Col className="flex-layout" span={8}>
-        <Link className="flex-layout" to="/">
+        <Link className="flex-layout header-right-content" to="/">
           <HomeOutlined className="home-icon" />
           <Title className="header-title">Funny Movies</Title>
         </Link>
