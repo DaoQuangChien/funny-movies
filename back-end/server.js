@@ -2,18 +2,23 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./app/models");
-const dbConfig = require("./app/config/db.config");
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: [
+    "https://funny-movies-frontend-chien.herokuapp.com",
+    "http://localhost:3000",
+  ],
 };
 const PORT = process.env.PORT || 8080;
 
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://admin:admin@cluster0.yd2r9.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("Successfully connect to MongoDB.");
   })
