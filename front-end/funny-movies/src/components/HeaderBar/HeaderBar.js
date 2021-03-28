@@ -38,7 +38,7 @@ const HeaderBar = ({ history }) => {
   const onNavigateToPostVideo = () => history.push("/post-movie");
   const SignInLayout = (
     <>
-      <p className="welcome-text">
+      <p className="welcome-text test-class">
         <span className="bold">Welcome </span>
         {userData?.email}
       </p>
